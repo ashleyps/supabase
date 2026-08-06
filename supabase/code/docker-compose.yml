@@ -128,6 +128,7 @@ services:
       PGRST_DB_USE_LEGACY_GUCS: "false"
       PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
       PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY}
+      PGRST_CORS_ALLOWED_ORIGINS: "${CORS_ORIGINS:-https://app.capitanlogo.com}"
     command: [ "postgrest" ]
 
   realtime:
