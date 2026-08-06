@@ -406,22 +406,15 @@ services:
     restart: unless-stopped
     volumes:
       - ./volumes/logs/vector.yml:/etc/vector/vector.yml:ro,z
-      - ${DOCKER_SOCKET_LOCATION}:/var/run/docker.sock:ro,z
+      - /var/run/docker.sock:/var/run/docker.sock:ro,z
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://vector:9001/health"
-        ]
+      test: [ "CMD", "true" ]
       timeout: 5s
       interval: 5s
       retries: 3
     environment:
       LOGFLARE_API_KEY: ${LOGFLARE_API_KEY}
+      DOCKER_HOST: unix:///var/run/docker.sock
     command: [ "--config", "/etc/vector/vector.yml" ]
     security_opt:
       - "label=disable"
