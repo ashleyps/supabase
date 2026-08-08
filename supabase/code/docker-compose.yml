@@ -58,7 +58,20 @@ services:
       SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
       DASHBOARD_USERNAME: ${DASHBOARD_USERNAME}
       DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD}
-    entrypoint: bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        awk '{
+          result = ""; rest = $0
+          while (match(rest, /\$[A-Za-z_][A-Za-z_0-9]*/)) {
+            v = substr(rest, RSTART+1, RLENGTH-1)
+            result = result substr(rest, 1, RSTART-1) (v in ENVIRON ? ENVIRON[v] : substr(rest, RSTART, RLENGTH))
+            rest = substr(rest, RSTART+RLENGTH)
+          }
+          print result rest
+        }' /home/kong/temp.yml > /home/kong/kong.yml && exec /docker-entrypoint.sh kong docker-start
 
   auth:
     image: supabase/gotrue:v2.172.1
