@@ -21,7 +21,7 @@ services:
           "fetch('http://studio:3000/api/platform/profile').then((r) => {if (r.status !== 200) throw new Error(r.status)})"
         ]
       timeout: 10s
-      interval: 5s
+      interval: 30s
       retries: 3
     environment:
       STUDIO_PG_META_URL: http://meta:8080
@@ -87,7 +87,7 @@ services:
           "http://localhost:9999/health"
         ]
       timeout: 5s
-      interval: 5s
+      interval: 30s
       retries: 3
     depends_on:
       db:
@@ -167,7 +167,7 @@ services:
           "http://localhost:4000/api/tenants/realtime/health"
         ]
       timeout: 5s
-      interval: 5s
+      interval: 30s
       retries: 3
     environment:
       PORT: 4000
@@ -205,7 +205,7 @@ services:
           "http://storage:5000/status"
         ]
       timeout: 5s
-      interval: 5s
+      interval: 30s
       retries: 3
     depends_on:
       db:
@@ -237,7 +237,7 @@ services:
     healthcheck:
       test: [ "CMD", "imgproxy", "health" ]
       timeout: 5s
-      interval: 5s
+      interval: 30s
       retries: 3
     environment:
       IMGPROXY_BIND: ":5001"
@@ -288,7 +288,7 @@ services:
       - db-config:/etc/postgresql-custom
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres", "-h", "localhost" ]
-      interval: 5s
+      interval: 30s
       timeout: 5s
       retries: 10
     environment:
@@ -326,7 +326,7 @@ services:
           "/dev/null",
           "http://127.0.0.1:4000/api/health"
         ]
-      interval: 10s
+      interval: 30s
       timeout: 5s
       retries: 5
     depends_on:
